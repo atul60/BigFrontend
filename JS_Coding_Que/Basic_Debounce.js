@@ -23,21 +23,22 @@ because window.setTimeout and window.clearTimeout are not accurate in browser en
 
 // This is a JavaScript coding problem from BFE.dev 
 
+
 /**
  * @param {(...args: any[]) => any} func
  * @param {number} wait
  * @returns {(...args: any[]) => any}
  */
 function debounce(func, wait) {
+    let lastCalled = 0;
     let timeId = null;
     return function(...args) {
-        if(timeId) {
-          clearTimeout(timeId);
-        }
-      timeId = setTimeout(() => {
-        func(...args);
-        timeId = null;
-        }, wait);
+      let now = Date.now();
+
+      if(timeId) {
+        clearTimeout(timeId);
+      }
+      timeId = setTimeout(() => func(...args), wait);
     }
   }
   
