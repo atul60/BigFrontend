@@ -1,0 +1,1 @@
+type MyNonNullable<T> = T extends undefined | null ? never : T;
