@@ -16,12 +16,6 @@ type AsyncFunc = (
 function sequence(funcs){
     return function(callback, data) {
            const len = funcs.length;
-        //    let func1 = funcs[0];
-        //    let func2 = funcs[1];
-        //    func1((error, data) => {
-        //     if(error) return callback(error, data);
-        //     func2(callback, data);
-        //    }, data);
         resultedFun(callback, funcs, len, 0, data)
         
         }
