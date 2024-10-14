@@ -57,19 +57,12 @@ function LazyMan(name, logFn) {
     lazyClass.task.push(['greet', name])
 
     async function exec() {
-      let result;
       for(let [event, variable] of lazyClass.task) {
-        result = await lazyClass[event](variable);
+        await lazyClass[event](variable);
       }
     }
 
     Promise.resolve().then(exec);
-    
-    // setTimeout(() => {
-    //   for(let item of runOrder) {
-    //     logFn(item);
-    //   }
-    // }, 0)
 
     return {
       eat: function(name) {
@@ -124,7 +117,7 @@ class AlazyMan {
 
 LazyMan('Jack', console.log)
   .eat('banana')
-  .sleepFirst(10)
+  .sleepFirst(2)
   .eat('apple')
   .sleep(1)
 // Wake up after 10 seconds.
