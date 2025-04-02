@@ -30,11 +30,7 @@ because window.setTimeout and window.clearTimeout are not accurate in browser en
 Something like below will be used to do the test.
 */
 
-
-
-
-
-// This is a JavaScript coding problem from BFE.dev 
+// This is a JavaScript coding problem from BFE.dev
 
 /**
  * @param {(...args: any[]) => any} func
@@ -43,30 +39,24 @@ Something like below will be used to do the test.
  * @param {boolean} option.trailing
  * @returns {(...args: any[]) => any}
  */
-function debounce(func, wait, option = {leading: false, trailing: true}) {
-    let timeId = null;
-    let lastCall = 0;
-    return function(...args) {
-      let now = Date.now();
-  
-      if (option.leading && (now - lastCall) - wait >= 0) {
-        func(...args);
-      } else {
-        if(timeId) {
-          clearTimeout(timeId);
-        } 
-  
-        timeId = setTimeout(() => {
-          if(option.trailing) {
-            func(...args);
-          }
-          timeId = null;
-        }, wait);
-      }
-      lastCall = now;
+function debounce(func, wait, option = { leading: false, trailing: true }) {
+  let timeId = null;
+  let newArgs = null;
+  return (...args) => {
+    if (timeId) {
+      clearTimeout(timeId);
+      newArgs = args;
+    } else if (option.leading) {
+      func(...args);
+    } else {
+      newArgs = args;
     }
-  }
-  
-  
-  
-  
+    timeId = setTimeout(() => {
+      if (newArgs && option.trailing) {
+        func(...args);
+      }
+      timeId = null;
+      newArgs = null;
+    }, wait);
+  };
+}
