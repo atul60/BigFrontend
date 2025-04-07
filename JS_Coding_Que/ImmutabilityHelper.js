@@ -1,41 +1,35 @@
-
-
 /**
  * @param {any} data
  * @param {Object} command
  */
+// const allowedOperations = ['$push', '$set', '$merge', '$apply'];
 function update(data, command) {
-  for(let [key, value] of Object.entries(command)) {
-    switch(key) {
-      case '$set':
-        return value;
-      case '$push':
+  const result = Object.entries(command);
+  const [key, value] = result[0];
+
+  switch (key) {
+    case "$push":
+      if (Array.isArray(value) && Array.isArray(data)) {
         data.push(...value);
-        return data;
-      case '$merge':
-      if(!(data instanceof Object))
-       throw Error('not possible')
-        return {
-          ...data,
-          ...value
-        }
-      case '$apply':
-        return value(data)
-      default:
-        if(data instanceof Array) {
-          let res = [...data];
-          res[key] = update(data[key], value);
-          return res;
-        } else {
-          return {
-            ...data,
-            [key]: update(data[key], value)
-          }
-        }
-    }
+      } else {
+        throw new Error();
+      }
+      return data;
+    case "$set":
+      return value;
+    case "$merge":
+      if (typeof data == "object" && typeof value == "object") {
+        data = { ...data, ...value };
+      } else {
+        throw new Error();
+      }
+      return data;
+    case "$apply":
+      if (typeof value == "function") {
+        return value(data);
+      }
+    default:
+      data[key] = update(data[key], value);
+      return data;
   }
-
-  return data;
-    
 }
-
