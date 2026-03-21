@@ -25,8 +25,8 @@ function curry(fn) {
 
     const intermediateFn = function(...args) {
   
-        if(args.length >= 3) {
-          return fn(...args.slice(0, 3));
+        if(args.length >= fn.length) {
+          return fn(...args.slice(0, fn.length));
         } else {
           return function(...args1) {
             return intermediateFn(...args, ...args1)
